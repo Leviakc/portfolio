@@ -2,6 +2,7 @@
 interface Props {
   title: string;
 }
+import "../styles/base.css";
 
 const { title } = Astro.props;
 ---
@@ -19,7 +20,6 @@ const { title } = Astro.props;
       href="https://fonts.googleapis.com/css2?family=Inknut+Antiqua:wght@300;400;500;600;&family=Outfit:wght@300;400;500;600&display=swap"
       rel="stylesheet"
     />
-    <link rel="stylesheet" href="/src/styles/base.css" />
     <meta name="generator" content={Astro.generator} />
     <title>{title}</title>
   </head>
@@ -35,5 +35,8 @@ const { title } = Astro.props;
   html {
     font-weight: 400;
     font-family: var(--ff-inter);
+  }
+  body {
+    color: #fff;
   }
 </style>
