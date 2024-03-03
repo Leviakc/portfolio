@@ -1,0 +1,112 @@
+---
+const LAUNCH_DATE = new Date(2024, 3, 13, 12, 30).getTime(); // 1713033000000
+---
+
+<section class="section">
+  <div class="section--time" data-date={LAUNCH_DATE}>
+    <span data-days class="countdown">00</span>
+    <span>Days</span>
+  </div>
+
+  <div class="section--time">
+    <span data-hours class="countdown">00</span>
+    <span>Hours</span>
+  </div>
+  <div class="section--time">
+    <span data-minutes class="countdown">00</span>
+    <span>Minutes</span>
+  </div>
+
+  <div class="section--time">
+    <span data-seconds class="countdown">00</span>
+    <span>Seconds</span>
+  </div>
+</section>
+
+<style lang="scss">
+  .section {
+    display: flex;
+    justify-content: space-around;
+
+    &--time {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-top: max(7vh, 2rem);
+      gap: max(2vh, 1.5rem);
+    }
+
+    .countdown {
+      border: 2px solid white;
+      padding: calc(0.5rem + 0.7vh);
+      font-size: calc(1.3rem + 2.3vw);
+      font-weight: 600;
+      text-align: center;
+      width: max(8vw, 9vh);
+      min-width: fit-content;
+
+      & + span {
+        font-weight: 600;
+        text-align: center;
+        font-size: calc(0.8rem + 1.2vw);
+      }
+    }
+  }
+</style>
+<script>
+  const DAYS = 1000 * 60 * 60 * 24;
+  const HOURS = 1000 * 60 * 60;
+  const MINUTES = 1000 * 60;
+  const SECONDS = 1000;
+
+  const countDown = document.querySelector("[data-date]");
+
+  if (!countDown) {
+    throw new Error("No launch date provided");
+  }
+
+  const launchDate = countDown.getAttribute("data-date");
+  const $days = document.querySelector("[data-days]");
+  const $hours = document.querySelector("[data-hours]");
+  const $minutes = document.querySelector("[data-minutes]");
+  const $seconds = document.querySelector("[data-seconds]");
+
+  if (typeof launchDate === null) {
+    // console.log("Invalid launch date");
+    throw new Error("Invalid launch date");
+  }
+  const formatTime = (time: number): string =>
+    Math.floor(time).toString().padStart(2, "0");
+
+  const updateTime = () => {
+    const diff = Number(launchDate) - Date.now();
+    const days = formatTime(diff / DAYS);
+    const hours = formatTime((diff % DAYS) / HOURS);
+    const minutes = formatTime((diff % HOURS) / MINUTES);
+    const seconds = formatTime((diff % MINUTES) / SECONDS);
+
+    if ($days instanceof HTMLElement) {
+      $days.innerText = days;
+    }
+
+    if ($hours instanceof HTMLElement) {
+      $hours.innerText = hours;
+    }
+
+    if ($minutes instanceof HTMLElement) {
+      $minutes.innerText = minutes;
+    }
+
+    if ($seconds instanceof HTMLElement) {
+      $seconds.innerText = seconds;
+    }
+    // $days.innerText = days;
+    // $hours.innerText = hours;
+    // $minutes.innerText = minutes;
+    // $seconds.innerText = seconds;
+  };
+
+  setInterval(() => {
+    updateTime();
+  }, 1000);
+</script>

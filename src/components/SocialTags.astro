@@ -1,0 +1,55 @@
+---
+const socialMedias = [
+  {
+    name: "GitHub",
+    asset: "/github.svg",
+    href: "https://github.com/Leviakc",
+  },
+  {
+    name: "Instagram",
+    asset: "/instagram.svg",
+    href: "https://www.instagram.com/juan_gomen/",
+  },
+  {
+    name: "Twitter",
+    asset: "/twitter.svg",
+    href: "https://twitter.com/Gomen_jd",
+  },
+];
+---
+
+<ul>
+  {
+    socialMedias.map((socialMedia) => (
+      <li>
+        <a href={socialMedia.href}>
+          <img
+            class="social--icon"
+            src={socialMedia.asset}
+            alt={socialMedia.name + " icon"}
+          />
+        </a>
+      </li>
+    ))
+  }
+</ul>
+
+<style lang="scss">
+  ul {
+    margin-top: max(8rem, 7vw);
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+    list-style: none;
+
+    li {
+      border-radius: 50%;
+      filter: invert(10%);
+
+      &:hover {
+        filter: invert(0%);
+        filter: drop-shadow(5px 5px 10px rgb(255 255 255));
+      }
+    }
+  }
+</style>
