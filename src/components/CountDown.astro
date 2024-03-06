@@ -75,8 +75,7 @@ const LAUNCH_DATE = new Date(2024, 3, 13, 12, 30).getTime(); // 1713033000000
     // console.log("Invalid launch date");
     throw new Error("Invalid launch date");
   }
-  const formatTime = (time: number): string =>
-    Math.floor(time).toString().padStart(2, "0");
+  const formatTime = (time) => Math.floor(time).toString().padStart(2, "0");
 
   const updateTime = () => {
     const diff = Number(launchDate) - Date.now();
