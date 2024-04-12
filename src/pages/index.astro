@@ -8,7 +8,6 @@ import SocialTags from "../components/SocialTags.astro";
   <main class="main">
     <h1 class="main--title">Coming soon</h1>
     <p class="main--text">I'm currently working on creating my portfolio</p>
-    <!-- https://web.dev/articles/font-best-practices -->
     <CountDown />
     <SocialTags />
     <!-- <div class="social-media"></div> -->
@@ -31,43 +30,46 @@ import SocialTags from "../components/SocialTags.astro";
     display: grid;
     place-content: center;
   }
+  body {
+    // Above there is an animation
 
-  .main {
-    background:
-      linear-gradient(
-        180deg,
-        rgba(0, 0, 0, 0.2) 0%,
-        rgba(84, 83, 83, 0.14) 39.77%
-      ),
-      url("/bg-image.webp"),
-      lightgray -52.113px -27.538px / 105.375% 105.179% no-repeat;
-    background-size: cover;
-    background-position: center;
-    // filter: contrast(0.9);
-    min-height: 100svh;
-    overflow: scroll;
-    @include grid-group;
+    .main {
+      background:
+        linear-gradient(
+          180deg,
+          rgba(0, 0, 0, 0.2) 0%,
+          rgba(84, 83, 83, 0.14) 39.77%
+        ),
+        url("/bg-image.webp"),
+        lightgray -52.113px -27.538px / 105.375% 105.179% no-repeat;
+      background-size: cover;
+      background-position: center;
+      // filter: contrast(0.9);
+      min-height: 100svh;
+      overflow: scroll;
+      @include grid-group;
 
-    &--title {
-      font-family: var(--ff-inknut);
-      font-size: calc(2rem + 4vw);
-      text-align: center;
-    }
+      &--title {
+        font-family: var(--ff-inknut);
+        font-size: calc(2.2rem + 4vw);
+        text-align: center;
+      }
 
-    &--text {
-      text-align: center;
-      font-size: max(1rem, 1.5vw);
-      font-weight: 500;
-    }
-    .photo--author {
-      font-size: max(1rem, 1.3vw);
-      font-weight: 500;
-      text-align: center;
-      margin-block: 2rem min(1rem, 2vw);
-
-      & a:visited {
-        color: white;
+      &--text {
+        text-align: center;
+        font-size: max(1rem, 1.5vw);
         font-weight: 500;
+      }
+      .photo--author {
+        font-size: max(1rem, 1.3vw);
+        font-weight: 500;
+        text-align: center;
+        margin-block: 2rem min(1rem, 2vw);
+
+        & a:visited {
+          color: white;
+          font-weight: 500;
+        }
       }
     }
   }
