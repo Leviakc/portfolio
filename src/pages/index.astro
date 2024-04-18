@@ -12,8 +12,9 @@ import SocialTags from "../components/SocialTags.astro";
     <SocialTags />
     <!-- <div class="social-media"></div> -->
     <p class="photo--author">
-      This photo was taken by <a href="https://www.instagram.com/jorgepach_07/"
-        >Jorge Pacheco</a
+      This photo was taken by <a
+        title="Jorge Pacheco instagram"
+        href="https://www.instagram.com/jorgepach_07/">Jorge Pacheco</a
       >
     </p>
   </main>
@@ -66,7 +67,12 @@ import SocialTags from "../components/SocialTags.astro";
         text-align: center;
         margin-block: 2rem min(1rem, 2vw);
 
-        & a:visited {
+        //& a:has(:visited, :link, :hover) {
+        // LVHA
+        & a:visited,
+        a:link,
+        a:hover,
+        a:active {
           color: white;
           font-weight: 500;
         }
