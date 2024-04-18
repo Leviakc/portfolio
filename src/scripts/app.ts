@@ -50,6 +50,8 @@ const updateTime = () => {
     // $seconds.innerText = seconds;
 };
 
+updateTime();
+
 setInterval(() => {
     updateTime();
 }, 1000);
