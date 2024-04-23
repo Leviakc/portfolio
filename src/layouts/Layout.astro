@@ -1,28 +1,40 @@
 ---
 interface Props {
   title: string;
+  description: string;
 }
 import "../styles/base.css";
+import "@fontsource/inknut-antiqua";
+import "@fontsource-variable/inter";
 
-const { title } = Astro.props;
+const { title, description } = Astro.props;
 ---
 
 <!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta name="description" content="Astro description" />
     <meta name="viewport" content="width=device-width" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <!-- https://web.dev/articles/font-best-practices -->
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Inknut+Antiqua:wght@300;400;500;600;&family=Outfit:wght@300;400;500;600&display=swap"
-      rel="stylesheet"
-    />
     <meta name="generator" content={Astro.generator} />
+    <meta name="description" content={description} />
+    <meta name="keywords" content="astro, social-media, gomen_jd, linktree" />
+
+    <meta property="og:title" content={title} />
+    <meta property="og:type" content="website" />
+    <meta property="og:description" content={description} />
+    <!-- <meta property="og:image"  content=""/> -->
+    <!-- <meta property="og:image:width"  content=""/> -->
+    <!-- <meta property="og:image:height"  content=""/> -->
+    <meta property="og:url" content="https://gomen.bio/" />
+
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:description" content={description} />
+    <!-- <meta name="twitter:image"  content=""/> -->
     <title>{title}</title>
+
+    <!-- https://web.dev/articles/font-best-practices -->
   </head>
   <body>
     <slot />
@@ -31,7 +43,7 @@ const { title } = Astro.props;
 <style is:global>
   :root {
     --ff-inknut: "Inknut Antiqua", serif;
-    --ff-inter: "Inter", sans-serif;
+    --ff-inter: "Inter Variable", sans-serif;
   }
   html {
     font-weight: 400;
