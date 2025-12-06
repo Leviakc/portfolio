@@ -4,6 +4,10 @@ import { DEFAULT_LANGUAGE, SUPPORTED_LANGUAGES } from './src/consts/constants';
 
 // https://astro.build/config
 export default defineConfig({
+  prefetch: {
+    prefetchAll: true,
+    defaultStrategy: "viewport"
+  },
   vite: {
     plugins: [tailwindcss()]
   },

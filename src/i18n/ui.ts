@@ -1,6 +1,6 @@
 import enHead from "./en/head";
 import esHead from "./es/head";
-import { DEFAULT_LANGUAGE, type SupportedLanguage } from "./constants";
+import { DEFAULT_LANGUAGE, type SupportedLanguage } from "@/consts/constants";
 
 export const languages: Record<SupportedLanguage, string> = {
   en: "English",
