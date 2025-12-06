@@ -1,85 +1,79 @@
 ---
 import Layout from "../layouts/Layout.astro";
-import CountDown from "../components/CountDown.astro";
-import SocialTags from "../components/SocialTags.astro";
+import Hero from "../components/hero.astro";
+import WorkSection from "../components/work-section.astro";
+import About from "../components/about.astro";
 ---
 
 <Layout
   title="Gomen's portfolio"
   description="Dev portfolio under construction"
 >
-  <main class="main hide-scrollbar">
-    <h1 class="main--title">Coming soon</h1>
-    <p class="main--text">I'm currently working on creating my portfolio</p>
-    <CountDown />
-    <SocialTags />
-    <!-- <div class="social-media"></div> -->
-    <p class="photo--author">
-      This photo was taken by <a
-        title="Jorge Pacheco instagram"
-        href="https://www.instagram.com/jorgepach_07/">Jorge Pacheco</a
+  <Hero />
+  <!-- Work Section (Tabs & Cards) -->
+  <WorkSection />
+
+  <!-- About / Skills Section -->
+  <About />
+
+  <!-- Contact Section -->
+  <section id="contact" class="py-24 px-6 bg-stone-900 text-stone-100">
+    <div class="max-w-5xl mx-auto text-center">
+      <h2 class="text-3xl md:text-4xl font-serif font-medium mb-6">
+        Let's work together.
+      </h2>
+      <p class="text-stone-400 mb-10 max-w-xl mx-auto">
+        I'm currently available for freelance projects and open to full-time
+        opportunities. If you have an idea you'd like to discuss, feel free to
+        reach out.
+      </p>
+
+      <a
+        href="mailto:your.email@example.com"
+        class="text-2xl md:text-5xl font-serif hover:text-stone-300 transition-colors border-b border-stone-700 pb-2"
       >
-    </p>
-  </main>
+        your.email@example.com
+      </a>
+
+      <div class="mt-16 flex justify-center space-x-8">
+        <a
+          href="#"
+          class="text-stone-400 hover:text-white transition-colors text-sm uppercase tracking-widest"
+          >LinkedIn</a
+        >
+        <a
+          href="#"
+          class="text-stone-400 hover:text-white transition-colors text-sm uppercase tracking-widest"
+          >Twitter</a
+        >
+        <a
+          href="#"
+          class="text-stone-400 hover:text-white transition-colors text-sm uppercase tracking-widest"
+          >GitHub</a
+        >
+        <a
+          href="#"
+          class="text-stone-400 hover:text-white transition-colors text-sm uppercase tracking-widest"
+          >Instagram</a
+        >
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer
+    class="py-8 bg-stone-900 border-t border-stone-800 text-center text-stone-500 text-sm"
+  >
+    <p>&copy; <span id="year"></span> Juan gomen. All rights reserved.</p>
+  </footer>
 </Layout>
 
-<style lang="scss">
-  *,
-  *::before,
-  *::after {
-    margin: 0;
-    padding: 0;
-  }
-  @mixin grid-group {
-    display: grid;
-    place-content: center;
-  }
-  body {
-    // Above there is an animation
+<script>
+  const main = () => {
+    const yearFooter = document.getElementById("year");
+    if (!yearFooter) return;
+    yearFooter.textContent = String(new Date().getFullYear());
+  };
 
-    .main {
-      background:
-        linear-gradient(
-          180deg,
-          rgba(0, 0, 0, 0.2) 0%,
-          rgba(84, 83, 83, 0.14) 39.77%
-        ),
-        url("/bg-image.webp"),
-        lightgray -52.113px -27.538px / 105.375% 105.179% no-repeat;
-      background-size: cover;
-      background-position: center;
-      // filter: contrast(0.9);
-      min-height: 100svh;
-      overflow: scroll;
-      @include grid-group;
-
-      &--title {
-        font-family: var(--ff-inknut);
-        font-size: calc(2.2rem + 4vw);
-        text-align: center;
-      }
-
-      &--text {
-        text-align: center;
-        font-size: max(1rem, 1.5vw);
-        font-weight: 500;
-      }
-      .photo--author {
-        font-size: max(1rem, 1.3vw);
-        font-weight: 500;
-        text-align: center;
-        margin-block: 2rem min(1rem, 2vw);
-
-        //& a:has(:visited, :link, :hover) {
-        // LVHA
-        & a:visited,
-        a:link,
-        a:hover,
-        a:active {
-          color: white;
-          font-weight: 500;
-        }
-      }
-    }
-  }
-</style>
+  main();
+</script>

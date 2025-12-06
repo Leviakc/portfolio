@@ -3,10 +3,7 @@ interface Props {
   title: string;
   description: string;
 }
-import "../styles/base.css";
-import "@fontsource/inknut-antiqua";
-import "@fontsource-variable/inter";
-
+import "../styles/global.css";
 const { title, description } = Astro.props;
 ---
 
@@ -32,31 +29,17 @@ const { title, description } = Astro.props;
     <meta name="twitter:card" content="summary" />
     <meta name="twitter:description" content={description} />
     <!-- <meta name="twitter:image"  content=""/> -->
-    <title>{title}</title>
 
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,600;1,400&display=swap"
+      rel="stylesheet"
+    />
+    <title>{title}</title>
     <!-- https://web.dev/articles/font-best-practices -->
   </head>
-  <body>
+  <body
+    class="bg-stone-50 text-stone-800 font-sans antialiased selection:bg-stone-200 selection:text-stone-900 relative"
+  >
     <slot />
   </body>
 </html>
-<style is:global>
-  :root {
-    --ff-inknut: "Inknut Antiqua", serif;
-    --ff-inter: "Inter Variable", sans-serif;
-  }
-  html {
-    font-weight: 400;
-    font-family: var(--ff-inter);
-  }
-  body {
-    color: #fff;
-  }
-  .hide-scrollbar {
-    -ms-overflow-style: none; /* IE 10+*/
-    scrollbar-width: none; /* Firefox */
-  }
-  .hide-scrollbar::-webkit-scrollbar {
-    display: none; /* Safari and Chrome */
-  }
-</style>
