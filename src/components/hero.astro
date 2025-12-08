@@ -1,70 +1,9 @@
+---
+import Nav from "./nav.astro";
+---
+
 <main>
-  <nav
-    class="fixed w-full z-50 bg-stone-50/80 backdrop-blur-md border-b border-stone-100 transition-all duration-300"
-    id="navbar"
-  >
-    <div class="max-w-5xl mx-auto px-6 h-20 flex items-center justify-between">
-      <a
-        href="#"
-        class="text-xl font-serif font-semibold tracking-tight hover:opacity-70 transition-opacity"
-      >
-        Juan Gomen
-      </a>
-
-      <!-- Desktop Menu -->
-      <div class="hidden md:flex space-x-8 text-sm font-medium text-stone-600">
-        <a href="#work" class="hover:text-stone-900 transition-colors">Work</a>
-        <a href="#about" class="hover:text-stone-900 transition-colors">About</a
-        >
-        <a href="#contact" class="hover:text-stone-900 transition-colors"
-          >Contact</a
-        >
-      </div>
-
-      <!-- Mobile Menu Button -->
-      <button
-        class="md:hidden p-2 text-stone-600 hover:text-stone-900"
-        data-menu="button"
-      >
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          class="h-6 w-6"
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke="currentColor"
-        >
-          <path
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            stroke-width="2"
-            d="M4 6h16M4 12h16M4 18h16"></path>
-        </svg>
-      </button>
-    </div>
-
-    <!-- Mobile Menu Overlay -->
-    <div
-      id="mobile-menu"
-      class="hidden md:hidden absolute top-20 left-0 w-full bg-stone-50 border-b border-stone-100 p-6 flex-col space-y-4 shadow-lg"
-    >
-      <a
-        href="#work"
-        class="block text-lg font-medium text-stone-600"
-        data-menu="button">Work</a
-      >
-      <a
-        href="#about"
-        class="block text-lg font-medium text-stone-600"
-        data-menu="button">About</a
-      >
-      <a
-        href="#contact"
-        class="block text-lg font-medium text-stone-600"
-        data-menu="button">Contact</a
-      >
-    </div>
-  </nav>
-
+  <Nav />
   <section class="min-h-screen flex flex-col justify-center px-6 pt-20">
     <div class="max-w-5xl mx-auto w-full">
       <div class="max-w-3xl">
@@ -81,8 +20,9 @@
         <p
           class="text-xl text-stone-600 mb-10 max-w-xl leading-relaxed fade-in-up delay-200"
         >
-          A [Your Job Title] based in [Your Location], specializing in building
-          accessible, human-centered products.
+          A Software Developer based in Mexico, specializing in building
+          accessible, human-centered products and solutions focus on
+          accesibility.
         </p>
         <div class="fade-in-up delay-300">
           <a
@@ -109,18 +49,3 @@
     </div>
   </section>
 </main>
-<script>
-  // --- UI Logic ---
-  const toggleMenu = () => {
-    const menu = document.getElementById("mobile-menu");
-    if (!menu) return;
-    menu.classList.toggle("hidden");
-    menu.classList.toggle("flex");
-  };
-
-  const $navbar = document.getElementById("navbar");
-  if (!$navbar) throw new Error("Navbar not found");
-  $navbar.addEventListener("click", () => {
-    toggleMenu();
-  });
-</script>

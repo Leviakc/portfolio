@@ -1,0 +1,250 @@
+---
+import { LANGUAGE_METADATA, type SupportedLanguage } from "@/consts/constants";
+import type { Language } from "@/types/language";
+
+const languages = Object.entries(LANGUAGE_METADATA).map(([code, meta]) => ({
+  code: code as SupportedLanguage,
+  ...meta,
+}));
+const currentPath =
+  Astro.url.pathname.replace(/^\/(SUPPORTED_LANGUAGES)/, "") || "/";
+
+console.log(Astro.url.pathname);
+console.log("Current Path:", currentPath);
+const currentLang = Astro.params.lang as Language;
+---
+
+<nav
+  class="fixed w-full z-50 bg-stone-50/80 backdrop-blur-md border-b border-stone-100 transition-all duration-300"
+  id="navbar"
+>
+  <div class="max-w-5xl mx-auto px-6 h-20 flex items-center justify-between">
+    <a
+      href="#"
+      class="text-xl font-serif font-semibold tracking-tight hover:opacity-70 transition-opacity"
+    >
+      Juan Gomen
+    </a>
+
+    <!-- Desktop Menu -->
+    <div class="hidden md:flex space-x-8 text-sm font-medium text-stone-600">
+      <div class="flex space-x-8">
+        <a href="#work" class="hover:text-stone-900 transition-colors">Work</a>
+        <a href="#about" class="hover:text-stone-900 transition-colors">About</a
+        >
+        <a href="#contact" class="hover:text-stone-900 transition-colors"
+          >Contact</a
+        >
+      </div>
+
+      <!-- Language Dropdown (Desktop) -->
+      <!-- Use 'relative' to position the dropdown absolute to this container -->
+      <div
+        class="relative pl-8 border-l border-stone-200"
+        id="lang-dropdown-container"
+      >
+        <button
+          class="flex items-center space-x-1 text-stone-500 hover:text-stone-900 transition-colors focus:outline-none hover:cursor-pointer"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="h-4 w-4"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+            ></path>
+          </svg>
+          <span class="uppercase font-semibold"
+            >{currentLang.toUpperCase()}</span
+          >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="h-3 w-3"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M19 9l-7 7-7-7"></path>
+          </svg>
+        </button>
+
+        <!-- Dropdown Menu -->
+        <div
+          id="lang-menu"
+          class="hidden absolute right-0 top-full mt-3 w-32 bg-white rounded-lg shadow-xl border border-stone-100 py-1 z-50 transform origin-top-right transition-all h-fit"
+        >
+          {
+            languages.map((lang) => (
+              <button
+                data-lang={lang.code}
+                data-current-path={currentPath}
+                class:list={[
+                  {
+                    "block px-4 py-2 text-sm text-stone-900 bg-stone-50 font-medium":
+                      currentLang === lang.code,
+                  },
+                  {
+                    "block px-4 py-2 text-sm text-stone-600 hover:text-stone-900 transition-colors":
+                      currentLang !== lang.code,
+                  },
+                  "cursor-pointer w-full hover:bg-stone-200 ",
+                ]}
+              >
+                {lang.nativeName}
+              </button>
+            ))
+          }
+        </div>
+      </div>
+    </div>
+
+    <!-- Mobile Menu Button -->
+    <button
+      class="md:hidden p-2 text-stone-600 hover:text-stone-900"
+      data-menu="button"
+    >
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        class="h-6 w-6"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke="currentColor"
+      >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          d="M4 6h16M4 12h16M4 18h16"></path>
+      </svg>
+    </button>
+  </div>
+
+  <!-- Mobile Menu Overlay -->
+  <div
+    id="mobile-menu"
+    class="hidden md:hidden absolute top-20 left-0 w-full bg-stone-50 border-b border-stone-100 p-6 flex-col space-y-4 shadow-lg"
+  >
+    <a
+      href="#work"
+      class="block text-lg font-medium text-stone-600"
+      data-menu="button">Work</a
+    >
+    <a
+      href="#about"
+      class="block text-lg font-medium text-stone-600"
+      data-menu="button">About</a
+    >
+    <a
+      href="#contact"
+      class="block text-lg font-medium text-stone-600"
+      data-menu="button">Contact</a
+    >
+
+    <div class="pt-4" data-language="mobile">
+      <span
+        class="text-xs font-bold uppercase tracking-widest text-stone-400 block mb-3 hover:cursor-pointer"
+        >Select Language</span
+      >
+      <div class="grid grid-cols-2 gap-3">
+        {
+          languages.map((lang) => (
+            <button
+              data-lang={lang.code}
+              class:list={[
+                {
+                  "flex items-center justify-center py-2 px-3 bg-stone-900 text-white rounded-md text-sm font-medium shadow-sm":
+                    currentLang === lang.code,
+                },
+                {
+                  "flex items-center justify-center py-2 px-3 bg-white border border-stone-200 text-stone-600 rounded-md text-sm font-medium hover:bg-stone-100 transition-colors":
+                    currentLang !== lang.code,
+                },
+                "cursor-pointer",
+              ]}
+            >
+              {lang.nativeName}
+            </button>
+          ))
+        }
+      </div>
+    </div>
+  </div>
+</nav>
+<script>
+  import { navigate } from "astro:transitions/client";
+
+  document.addEventListener("astro:page-load", () => {
+    // --- UI Logic ---
+    const toggleMenu = () => {
+      const menu = document.getElementById("mobile-menu");
+      if (!menu) return;
+      menu.classList.toggle("hidden");
+      menu.classList.toggle("flex");
+    };
+
+    const changeLanguage = (item: HTMLElement) => {
+      const selectedLang = item.getAttribute("data-lang");
+      const currentPath = window.location.pathname;
+      if (!selectedLang || !currentPath) return;
+      if (currentPath.includes(`/${selectedLang}/`)) return;
+
+      const newPath = window.location.href.replace(
+        currentPath,
+        `/${selectedLang}/`,
+      );
+      navigate(newPath);
+    };
+
+    const $navbar = document.getElementById("navbar");
+    const $langMenu = document.getElementById("lang-menu");
+    const $langButtons = document.querySelectorAll(
+      "[data-language='mobile'] button",
+    );
+    const $langDropdownContainer = document.getElementById(
+      "lang-dropdown-container",
+    );
+
+    if (!$navbar || !$langDropdownContainer || !$langButtons)
+      throw new Error("Navbar not found");
+
+    $langButtons.forEach(($btn) => {
+      $btn.addEventListener("click", (e) => {
+        const target = e.target as HTMLElement;
+        changeLanguage(target);
+      });
+    });
+    $navbar.addEventListener("click", (e) => {
+      const target = e.target as HTMLElement;
+      console.log(target);
+      toggleMenu();
+    });
+
+    $langDropdownContainer.addEventListener("click", (e) => {
+      if (!$langMenu) return;
+      $langMenu.classList.toggle("hidden");
+      changeLanguage(e.target as HTMLElement);
+    });
+
+    window.addEventListener("click", (event) => {
+      const target = event.target as HTMLElement;
+      const $langContainer = document.getElementById("lang-dropdown-container");
+      const $langMenu = document.getElementById("lang-menu");
+      if (!$langContainer || !$langMenu) return;
+      if ($langContainer && !$langContainer.contains(target)) {
+        if (!$langMenu.classList.contains("hidden")) {
+          $langMenu.classList.add("hidden");
+        }
+      }
+    });
+  });
+</script>
