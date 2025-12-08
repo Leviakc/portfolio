@@ -5,10 +5,15 @@ import WorkSection from "@/components/work-section.astro";
 import About from "@/components/about.astro";
 import SocialTags from "@/components/social-tags.astro";
 import { createLanguageParams } from "@/consts/constants";
+import type { Language } from "@/types/language";
+import { useTranslations } from "@/i18n/utils";
 
 export async function getStaticPaths() {
   return createLanguageParams();
 }
+
+const lang = Astro.params.lang as Language;
+const t = useTranslations(lang);
 ---
 
 <Layout
@@ -29,7 +34,7 @@ export async function getStaticPaths() {
   <footer
     class="py-8 bg-stone-900 border-t border-stone-800 text-center text-stone-500 text-sm"
   >
-    <p>&copy; <span id="year"></span> Juan gomen. All rights reserved.</p>
+    <p>&copy; <span id="year"></span> Juan gomen. {t("footer.rights")}</p>
   </footer>
 </Layout>
 
