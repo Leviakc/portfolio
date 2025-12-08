@@ -6,11 +6,6 @@ const languages = Object.entries(LANGUAGE_METADATA).map(([code, meta]) => ({
   code: code as SupportedLanguage,
   ...meta,
 }));
-const currentPath =
-  Astro.url.pathname.replace(/^\/(SUPPORTED_LANGUAGES)/, "") || "/";
-
-console.log(Astro.url.pathname);
-console.log("Current Path:", currentPath);
 const currentLang = Astro.params.lang as Language;
 ---
 
@@ -87,7 +82,6 @@ const currentLang = Astro.params.lang as Language;
             languages.map((lang) => (
               <button
                 data-lang={lang.code}
-                data-current-path={currentPath}
                 class:list={[
                   {
                     "block px-4 py-2 text-sm text-stone-900 bg-stone-50 font-medium":
@@ -109,10 +103,7 @@ const currentLang = Astro.params.lang as Language;
     </div>
 
     <!-- Mobile Menu Button -->
-    <button
-      class="md:hidden p-2 text-stone-600 hover:text-stone-900"
-      data-menu="button"
-    >
+    <button class="md:hidden p-2 text-stone-600 hover:text-stone-900">
       <svg
         xmlns="http://www.w3.org/2000/svg"
         class="h-6 w-6"
@@ -134,20 +125,10 @@ const currentLang = Astro.params.lang as Language;
     id="mobile-menu"
     class="hidden md:hidden absolute top-20 left-0 w-full bg-stone-50 border-b border-stone-100 p-6 flex-col space-y-4 shadow-lg"
   >
-    <a
-      href="#work"
-      class="block text-lg font-medium text-stone-600"
-      data-menu="button">Work</a
-    >
-    <a
-      href="#about"
-      class="block text-lg font-medium text-stone-600"
-      data-menu="button">About</a
-    >
-    <a
-      href="#contact"
-      class="block text-lg font-medium text-stone-600"
-      data-menu="button">Contact</a
+    <a href="#work" class="block text-lg font-medium text-stone-600">Work</a>
+    <a href="#about" class="block text-lg font-medium text-stone-600">About</a>
+    <a href="#contact" class="block text-lg font-medium text-stone-600"
+      >Contact</a
     >
 
     <div class="pt-4" data-language="mobile">
@@ -223,9 +204,7 @@ const currentLang = Astro.params.lang as Language;
         changeLanguage(target);
       });
     });
-    $navbar.addEventListener("click", (e) => {
-      const target = e.target as HTMLElement;
-      console.log(target);
+    $navbar.addEventListener("click", () => {
       toggleMenu();
     });
 
