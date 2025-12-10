@@ -39,7 +39,12 @@ const currentLang = Astro.params.lang as Language;
         id="lang-dropdown-container"
       >
         <button
+          id="lang-dropdown-button"
           class="flex items-center space-x-1 text-stone-500 hover:text-stone-900 transition-colors focus:outline-none hover:cursor-pointer"
+          aria-label="Select language"
+          aria-expanded="false"
+          aria-haspopup="true"
+          aria-controls="lang-menu"
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -47,6 +52,7 @@ const currentLang = Astro.params.lang as Language;
             fill="none"
             viewBox="0 0 24 24"
             stroke="currentColor"
+            aria-hidden="true"
           >
             <path
               stroke-linecap="round"
@@ -76,12 +82,17 @@ const currentLang = Astro.params.lang as Language;
         <!-- Dropdown Menu -->
         <div
           id="lang-menu"
+          role="menu"
+          aria-labelledby="lang-dropdown-button"
           class="hidden absolute right-0 top-full mt-3 w-32 bg-white rounded-lg shadow-xl border border-stone-100 py-1 z-50 transform origin-top-right transition-all h-fit"
         >
           {
             languages.map((lang) => (
               <button
                 data-lang={lang.code}
+                role="menuitem"
+                aria-current={currentLang === lang.code ? "true" : "false"}
+                tabindex="-1"
                 class:list={[
                   {
                     "block px-4 py-2 text-sm text-stone-900 bg-stone-50 font-medium":
@@ -103,13 +114,20 @@ const currentLang = Astro.params.lang as Language;
     </div>
 
     <!-- Mobile Menu Button -->
-    <button class="md:hidden p-2 text-stone-600 hover:text-stone-900">
+    <button
+      class="md:hidden p-2 text-stone-600 hover:text-stone-900"
+      data-menu="button"
+      aria-label="Toggle navigation menu"
+      aria-expanded="false"
+      aria-controls="mobile-menu"
+    >
       <svg
         xmlns="http://www.w3.org/2000/svg"
         class="h-6 w-6"
         fill="none"
         viewBox="0 0 24 24"
         stroke="currentColor"
+        aria-hidden="true"
       >
         <path
           stroke-linecap="round"
@@ -141,6 +159,8 @@ const currentLang = Astro.params.lang as Language;
           languages.map((lang) => (
             <button
               data-lang={lang.code}
+              aria-current={currentLang === lang.code ? "true" : "false"}
+              aria-label={`Switch to ${lang.nativeName}`}
               class:list={[
                 {
                   "flex items-center justify-center py-2 px-3 bg-stone-900 text-white rounded-md text-sm font-medium shadow-sm":
@@ -165,18 +185,67 @@ const currentLang = Astro.params.lang as Language;
   import { navigate } from "astro:transitions/client";
 
   document.addEventListener("astro:page-load", () => {
-    // --- UI Logic ---
-    const toggleMenu = () => {
-      const menu = document.getElementById("mobile-menu");
-      if (!menu) return;
-      menu.classList.toggle("hidden");
-      menu.classList.toggle("flex");
+    // Cache DOM elements ⬅️ STEP 3: Query elements once instead of repeatedly
+    const $navbar = document.getElementById("navbar");
+    const $mobileMenu = document.getElementById("mobile-menu");
+    const $mobileMenuButton = document.querySelector('[data-menu="button"]') as HTMLButtonElement;
+    const $langMenu = document.getElementById("lang-menu");
+    const $langDropdownButton = document.getElementById("lang-dropdown-button") as HTMLButtonElement;
+    const $langDropdownContainer = document.getElementById("lang-dropdown-container");
+    const $desktopLangButtons = $langMenu?.querySelectorAll('[role="menuitem"]') as NodeListOf<HTMLButtonElement>;
+    const $mobileLangButtons = document.querySelectorAll('[data-language="mobile"] button') as NodeListOf<HTMLButtonElement>;
+
+    if (!$navbar || !$mobileMenu || !$mobileMenuButton) {
+      console.error("Required navbar elements not found"); // ⬅️ STEP 3: Better error handling
+      return;
+    }
+
+    // --- Mobile Menu Logic ---
+    const toggleMobileMenu = () => {
+      const isHidden = $mobileMenu.classList.contains("hidden");
+      $mobileMenu.classList.toggle("hidden");
+      $mobileMenu.classList.toggle("flex");
+      $mobileMenuButton.setAttribute("aria-expanded", String(!isHidden));
+      
+      // Focus management ⬅️ STEP 2: Return focus when closing
+      if (!isHidden) {
+        $mobileMenuButton.focus();
+      }
     };
 
-    const changeLanguage = (item: HTMLElement) => {
-      const selectedLang = item.getAttribute("data-lang");
+    // --- Language Dropdown Logic ---
+    const toggleLangDropdown = () => {
+      if (!$langMenu || !$langDropdownButton) return;
+      
+      const isHidden = $langMenu.classList.contains("hidden");
+      $langMenu.classList.toggle("hidden");
+      $langDropdownButton.setAttribute("aria-expanded", String(isHidden));
+      
+      // Focus first menu item when opening ⬅️ STEP 2: Keyboard focus management
+      if (isHidden && $desktopLangButtons.length > 0) {
+        $desktopLangButtons[0].focus();
+        $desktopLangButtons[0].tabIndex = 0;
+      }
+    };
+
+    const closeLangDropdown = () => {
+      if (!$langMenu || !$langDropdownButton) return;
+      
+      if (!$langMenu.classList.contains("hidden")) {
+        $langMenu.classList.add("hidden");
+        $langDropdownButton.setAttribute("aria-expanded", "false");
+        $langDropdownButton.focus(); // ⬅️ STEP 2: Return focus to button
+      }
+    };
+
+    // --- Language Change Logic ---
+    const changeLanguage = (element: HTMLElement | null) => {
+      if (!element) return;
+      
+      const selectedLang = element.getAttribute("data-lang");
       const currentPath = window.location.pathname;
-      if (!selectedLang || !currentPath) return;
+      
+      if (!selectedLang) return;
       if (currentPath.includes(`/${selectedLang}/`)) return;
 
       const newPath = window.location.href.replace(
@@ -186,44 +255,110 @@ const currentLang = Astro.params.lang as Language;
       navigate(newPath);
     };
 
-    const $navbar = document.getElementById("navbar");
-    const $langMenu = document.getElementById("lang-menu");
-    const $langButtons = document.querySelectorAll(
-      "[data-language='mobile'] button",
-    );
-    const $langDropdownContainer = document.getElementById(
-      "lang-dropdown-container",
-    );
-
-    if (!$navbar || !$langDropdownContainer || !$langButtons)
-      throw new Error("Navbar not found");
-
-    $langButtons.forEach(($btn) => {
-      $btn.addEventListener("click", (e) => {
-        const target = e.target as HTMLElement;
-        changeLanguage(target);
-      });
-    });
-    $navbar.addEventListener("click", () => {
-      toggleMenu();
-    });
-
-    $langDropdownContainer.addEventListener("click", (e) => {
-      if (!$langMenu) return;
-      $langMenu.classList.toggle("hidden");
-      changeLanguage(e.target as HTMLElement);
-    });
-
-    window.addEventListener("click", (event) => {
-      const target = event.target as HTMLElement;
-      const $langContainer = document.getElementById("lang-dropdown-container");
-      const $langMenu = document.getElementById("lang-menu");
-      if (!$langContainer || !$langMenu) return;
-      if ($langContainer && !$langContainer.contains(target)) {
-        if (!$langMenu.classList.contains("hidden")) {
-          $langMenu.classList.add("hidden");
-        }
+    // --- Event Handlers --- ⬅️ STEP 3: Proper event delegation
+    const handleMobileMenuClick = (e: Event) => {
+      const target = e.target as HTMLElement;
+      if (target.closest('[data-menu="button"]')) {
+        toggleMobileMenu();
       }
+    };
+
+    const handleLangDropdownClick = (e: Event) => {
+      const target = e.target as HTMLElement;
+      
+      // Toggle dropdown if clicking the button
+      if (target.closest('#lang-dropdown-button')) {
+        e.stopPropagation();
+        toggleLangDropdown();
+        return;
+      }
+      
+      // Change language if clicking a menu item
+      const langButton = target.closest('[role="menuitem"]') as HTMLElement;
+      if (langButton) {
+        changeLanguage(langButton);
+        closeLangDropdown();
+      }
+    };
+
+    const handleClickOutside = (event: Event) => {
+      const target = event.target as HTMLElement;
+      
+      if ($langDropdownContainer && !$langDropdownContainer.contains(target)) {
+        closeLangDropdown();
+      }
+    };
+
+    // ⬅️ STEP 2: KEYBOARD NAVIGATION for dropdown
+    const handleDropdownKeydown = (e: KeyboardEvent) => {
+      if (!$langMenu || !$desktopLangButtons) return;
+      
+      const isOpen = !$langMenu.classList.contains("hidden");
+      
+      switch (e.key) {
+        case "Escape": // Close dropdown with Escape key
+          if (isOpen) {
+            e.preventDefault();
+            closeLangDropdown();
+          }
+          break;
+          
+        case "ArrowDown": // Navigate to next language option
+          if (isOpen) {
+            e.preventDefault();
+            const currentIndex = Array.from($desktopLangButtons).findIndex(btn => btn === document.activeElement);
+            const nextIndex = (currentIndex + 1) % $desktopLangButtons.length;
+            $desktopLangButtons[currentIndex]?.setAttribute('tabindex', '-1');
+            $desktopLangButtons[nextIndex]?.setAttribute('tabindex', '0');
+            $desktopLangButtons[nextIndex]?.focus();
+          }
+          break;
+          
+        case "ArrowUp": // Navigate to previous language option
+          if (isOpen) {
+            e.preventDefault();
+            const currentIndex = Array.from($desktopLangButtons).findIndex(btn => btn === document.activeElement);
+            const prevIndex = currentIndex <= 0 ? $desktopLangButtons.length - 1 : currentIndex - 1;
+            $desktopLangButtons[currentIndex]?.setAttribute('tabindex', '-1');
+            $desktopLangButtons[prevIndex]?.setAttribute('tabindex', '0');
+            $desktopLangButtons[prevIndex]?.focus();
+          }
+          break;
+          
+        case "Enter":
+        case " ": // Select language option with Enter or Space
+          if (isOpen && document.activeElement instanceof HTMLElement) {
+            e.preventDefault();
+            changeLanguage(document.activeElement);
+            closeLangDropdown();
+          }
+          break;
+      }
+    };
+
+    // --- Attach Event Listeners ---
+    $mobileMenuButton.addEventListener("click", handleMobileMenuClick);
+    $langDropdownContainer?.addEventListener("click", handleLangDropdownClick);
+    document.addEventListener("click", handleClickOutside);
+    $langDropdownContainer?.addEventListener("keydown", handleDropdownKeydown); // ⬅️ STEP 2: Attach keyboard handler
+
+    // Mobile language buttons
+    $mobileLangButtons.forEach(($btn) => {
+      const handler = () => changeLanguage($btn);
+      $btn.addEventListener("click", handler);
     });
+
+    // ⬅️ STEP 3: CLEANUP - Remove event listeners before page transition (prevents memory leaks)
+    document.addEventListener("astro:before-preparation", () => {
+      $mobileMenuButton.removeEventListener("click", handleMobileMenuClick);
+      $langDropdownContainer?.removeEventListener("click", handleLangDropdownClick);
+      document.removeEventListener("click", handleClickOutside);
+      $langDropdownContainer?.removeEventListener("keydown", handleDropdownKeydown);
+      
+      $mobileLangButtons.forEach(($btn) => {
+        const handler = () => changeLanguage($btn);
+        $btn.removeEventListener("click", handler);
+      });
+    }, { once: true });
   });
 </script>
