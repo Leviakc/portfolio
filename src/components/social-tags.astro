@@ -1,4 +1,10 @@
 ---
+import type { Language } from "@/types/language";
+import { useTranslations } from "@/i18n/utils";
+
+const lang = Astro.params.lang as Language;
+const t = useTranslations(lang);
+
 const socialMedias = [
   {
     name: "GitHub",
@@ -15,41 +21,47 @@ const socialMedias = [
     asset: "/twitter.svg",
     href: "https://twitter.com/Gomen_jd",
   },
+  {
+    name: "LinkedIn",
+    asset: "/linkedin.svg",
+    href: "https://www.linkedin.com/in/juangomen/",
+  },
 ];
 ---
 
-<ul>
-  {
-    socialMedias.map((socialMedia) => (
-      <li>
-        <a href={socialMedia.href}>
-          <img
-            class="social--icon"
-            src={socialMedia.asset}
-            alt={socialMedia.name + " icon"}
-          />
-        </a>
-      </li>
-    ))
-  }
-</ul>
+<section id="contact" class="py-24 px-6 bg-stone-900 text-stone-100">
+  <div class="max-w-5xl mx-auto text-center">
+    <h2 class="text-3xl md:text-4xl font-serif font-medium mb-6">
+      {t("contact.title")}
+    </h2>
+    <p class="text-stone-400 mb-10 max-w-xl mx-auto">
+      {t("contact.description")}
+    </p>
 
-<style lang="scss">
-  ul {
-    margin-top: max(8rem, 7vw);
-    display: flex;
-    justify-content: center;
-    gap: 2rem;
-    list-style: none;
+    <a
+      href={`mailto:${t("contact.email")}`}
+      class="text-2xl md:text-5xl font-serif hover:text-stone-300 transition-colors border-b border-stone-700 pb-2"
+    >
+      {t("contact.email")}
+    </a>
 
-    li {
-      border-radius: 50%;
-      filter: invert(10%);
-
-      &:hover {
-        filter: invert(0%);
-        filter: drop-shadow(5px 5px 10px rgb(255 255 255));
-      }
-    }
-  }
-</style>
+    <div>
+      <ul class="mt-16 flex space-x-8 justify-center">
+        {
+          socialMedias.map((socialMedia) => (
+            <li>
+              <a
+                href={socialMedia.href}
+                class="text-stone-400 hover:text-white transition-colors text-sm uppercase tracking-widest"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                {socialMedia.name}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </div>
+</section>
