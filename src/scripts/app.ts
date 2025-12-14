@@ -6,7 +6,7 @@ const DAYS = HOURS * 24;
 const countDown = document.querySelector("[data-date]");
 
 if (!countDown) {
-    throw new Error("No launch date provided");
+  throw new Error("No launch date provided");
 }
 
 const launchDate = countDown.getAttribute("data-date");
@@ -16,42 +16,37 @@ const $minutes = document.querySelector("[data-minutes]");
 const $seconds = document.querySelector("[data-seconds]");
 
 if (typeof launchDate === null) {
-    // console.log("Invalid launch date");
-    throw new Error("Invalid launch date");
+  throw new Error("Invalid launch date");
 }
 const formatTime = (time: number) =>
-    Math.floor(time).toString().padStart(2, "0");
+  Math.floor(time).toString().padStart(2, "0");
 
 const updateTime = () => {
-    const diff = Number(launchDate) - Date.now();
-    const days = formatTime(diff / DAYS);
-    const hours = formatTime((diff % DAYS) / HOURS);
-    const minutes = formatTime((diff % HOURS) / MINUTES);
-    const seconds = formatTime((diff % MINUTES) / SECONDS);
+  const diff = Number(launchDate) - Date.now();
+  const days = formatTime(diff / DAYS);
+  const hours = formatTime((diff % DAYS) / HOURS);
+  const minutes = formatTime((diff % HOURS) / MINUTES);
+  const seconds = formatTime((diff % MINUTES) / SECONDS);
 
-    if ($days instanceof HTMLElement) {
-        $days.innerText = days;
-    }
+  if ($days instanceof HTMLElement) {
+    $days.innerText = days;
+  }
 
-    if ($hours instanceof HTMLElement) {
-        $hours.innerText = hours;
-    }
+  if ($hours instanceof HTMLElement) {
+    $hours.innerText = hours;
+  }
 
-    if ($minutes instanceof HTMLElement) {
-        $minutes.innerText = minutes;
-    }
+  if ($minutes instanceof HTMLElement) {
+    $minutes.innerText = minutes;
+  }
 
-    if ($seconds instanceof HTMLElement) {
-        $seconds.innerText = seconds;
-    }
-    // $days.innerText = days;
-    // $hours.innerText = hours;
-    // $minutes.innerText = minutes;
-    // $seconds.innerText = seconds;
+  if ($seconds instanceof HTMLElement) {
+    $seconds.innerText = seconds;
+  }
 };
 
 updateTime();
 
 setInterval(() => {
-    updateTime();
+  updateTime();
 }, 1000);
