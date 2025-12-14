@@ -1,12 +1,14 @@
 ---
 import { LANGUAGE_METADATA, type SupportedLanguage } from "@/consts/constants";
 import type { Language } from "@/types/language";
+import { useTranslations } from "@/i18n/utils";
 
 const languages = Object.entries(LANGUAGE_METADATA).map(([code, meta]) => ({
   code: code as SupportedLanguage,
   ...meta,
 }));
 const currentLang = Astro.params.lang as Language;
+const t = useTranslations(currentLang);
 ---
 
 <nav
@@ -24,11 +26,11 @@ const currentLang = Astro.params.lang as Language;
     <!-- Desktop Menu -->
     <div class="hidden md:flex space-x-8 text-sm font-medium text-stone-600">
       <div class="flex space-x-8">
-        <a href="#work" class="hover:text-stone-900 transition-colors">Work</a>
-        <a href="#about" class="hover:text-stone-900 transition-colors">About</a
+        <a href="#work" class="hover:text-stone-900 transition-colors">{t("nav.work")}</a>
+        <a href="#about" class="hover:text-stone-900 transition-colors">{t("nav.about")}</a
         >
         <a href="#contact" class="hover:text-stone-900 transition-colors"
-          >Contact</a
+          >{t("nav.contact")}</a
         >
       </div>
 
@@ -143,16 +145,16 @@ const currentLang = Astro.params.lang as Language;
     id="mobile-menu"
     class="hidden md:hidden absolute top-20 left-0 w-full bg-stone-50 border-b border-stone-100 p-6 flex-col space-y-4 shadow-lg"
   >
-    <a href="#work" class="block text-lg font-medium text-stone-600">Work</a>
-    <a href="#about" class="block text-lg font-medium text-stone-600">About</a>
+    <a href="#work" class="block text-lg font-medium text-stone-600">{t("nav.work")}</a>
+    <a href="#about" class="block text-lg font-medium text-stone-600">{t("nav.about")}</a>
     <a href="#contact" class="block text-lg font-medium text-stone-600"
-      >Contact</a
+      >{t("nav.contact")}</a
     >
 
     <div class="pt-4" data-language="mobile">
       <span
         class="text-xs font-bold uppercase tracking-widest text-stone-400 block mb-3 hover:cursor-pointer"
-        >Select Language</span
+        >{t("nav.selectLanguage")}</span
       >
       <div class="grid grid-cols-2 gap-3">
         {
