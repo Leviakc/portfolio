@@ -4,6 +4,7 @@ import { DEFAULT_LANGUAGE, SUPPORTED_LANGUAGES } from './src/consts/constants';
 
 // https://astro.build/config
 export default defineConfig({
+  site: 'https://gomen.dev', // Update this to your actual domain when deployed
   prefetch: {
     prefetchAll: true,
     defaultStrategy: "viewport"
