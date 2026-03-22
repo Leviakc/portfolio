@@ -31,7 +31,7 @@ const t = useTranslations(lang);
 
 <project-card data-name={title}>
   <dialog
-    class="rounded-xl shadow-2xl p-0 w-full max-w-2xl max-h-[90vh] overflow-y-auto backdrop:bg-black/50 backdrop:backdrop-blur-sm border-0 m-auto"
+    class="rounded-xl shadow-2xl p-0 w-[calc(100%-2rem)] max-w-2xl max-h-[90vh] overflow-y-auto backdrop:bg-black/50 backdrop:backdrop-blur-sm border-0 inset-0 m-auto"
   >
     <div class="bg-white rounded-xl">
       <div class="flex justify-between items-center px-8 pt-8 pb-4">
@@ -63,7 +63,7 @@ const t = useTranslations(lang);
           alt={title}
           width={800}
           height={450}
-          class="w-full h-full object-cover"
+          class="w-full h-full object-fill"
         />
       </div>
       <p class="px-8 mb-6 text-stone-600 leading-relaxed text-sm">
@@ -114,13 +114,12 @@ const t = useTranslations(lang);
       <div
         class="absolute inset-0 flex items-center justify-center text-stone-400"
       >
-        <!-- Icon or Image for Chatbot -->
         <Image
           src=`/${previewImage}`
-          alt="Project Preview"
+          alt={title}
           width={400}
           height={800}
-          class="w-full h-full object-fill absolute inset-0 grayscale group-hover:grayscale-0 transition-all duration-500"
+          class="w-full h-full object-cover absolute inset-0 grayscale group-hover:grayscale-0 transition-all duration-500"
         />
       </div>
       <div
@@ -145,12 +144,9 @@ const t = useTranslations(lang);
                 <span class="px-2 py-1 bg-white border border-stone-200 rounded text-xs font-medium text-stone-500">
                   {tech}
                 </span>
-                {
-                  // NOTE: I wrote 2 because is the max of technologies that may appear
-                }
-                {i === 2 && technologies.length > 1 && (
+                {i === 2 && technologies.length > 3 && (
                   <span class="px-2 py-1 bg-white border border-stone-200 rounded text-xs font-medium text-stone-500">
-                    +{technologies.length - 3} {moreTechnologies}
+                    +{technologies.length - 3} {moreTechnologies ?? "more"}
                   </span>
                 )}
               </>
@@ -164,7 +160,7 @@ const t = useTranslations(lang);
 </project-card>
 
 <script>
-  class Project2Card extends HTMLElement {
+  class ProjectCard extends HTMLElement {
     constructor() {
       super();
     }
@@ -193,5 +189,5 @@ const t = useTranslations(lang);
     }
   }
 
-  customElements.define("project-card", Project2Card);
+  customElements.define("project-card", ProjectCard);
 </script>
