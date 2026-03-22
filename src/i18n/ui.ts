@@ -1,10 +1,8 @@
-import enHead from "./en/head";
 import enFooter from "./en/footer";
 import enAbout from "./en/about";
 import enContact from "./en/contact";
 import enNav from "./en/nav";
 import enHero from "./en/hero";
-import esHead from "./es/head";
 import esFooter from "./es/footer";
 import esAbout from "./es/about";
 import esContact from "./es/contact";
@@ -21,7 +19,6 @@ export const defaultLang = DEFAULT_LANGUAGE;
 
 export const ui = {
   en: {
-    ...enHead,
     ...enFooter,
     ...enAbout,
     ...enContact,
@@ -29,7 +26,6 @@ export const ui = {
     ...enHero,
   },
   es: {
-    ...esHead,
     ...esFooter,
     ...esAbout,
     ...esContact,
