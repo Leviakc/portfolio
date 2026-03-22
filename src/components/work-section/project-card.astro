@@ -29,7 +29,7 @@ const lang = Astro.params.lang as Language;
 const t = useTranslations(lang);
 ---
 
-<project-card data-name={title}>
+<project-card data-name={title} data-category={category}>
   <dialog
     class="rounded-xl shadow-2xl p-0 w-[calc(100%-2rem)] max-w-2xl max-h-[90vh] overflow-y-auto backdrop:bg-black/50 backdrop:backdrop-blur-sm border-0 inset-0 m-auto"
   >
