@@ -207,7 +207,7 @@ const t = useTranslations(currentLang);
       const isHidden = $mobileMenu.classList.contains("hidden");
       $mobileMenu.classList.toggle("hidden");
       $mobileMenu.classList.toggle("flex");
-      $mobileMenuButton.setAttribute("aria-expanded", String(!isHidden));
+      $mobileMenuButton.setAttribute("aria-expanded", String(isHidden));
       
       // Focus management ⬅️ STEP 2: Return focus when closing
       if (!isHidden) {
@@ -345,8 +345,10 @@ const t = useTranslations(currentLang);
     $langDropdownContainer?.addEventListener("keydown", handleDropdownKeydown); // ⬅️ STEP 2: Attach keyboard handler
 
     // Mobile language buttons
+    const mobileLangHandlers = new Map<HTMLButtonElement, () => void>();
     $mobileLangButtons.forEach(($btn) => {
       const handler = () => changeLanguage($btn);
+      mobileLangHandlers.set($btn, handler);
       $btn.addEventListener("click", handler);
     });
 
@@ -356,10 +358,10 @@ const t = useTranslations(currentLang);
       $langDropdownContainer?.removeEventListener("click", handleLangDropdownClick);
       document.removeEventListener("click", handleClickOutside);
       $langDropdownContainer?.removeEventListener("keydown", handleDropdownKeydown);
-      
+
       $mobileLangButtons.forEach(($btn) => {
-        const handler = () => changeLanguage($btn);
-        $btn.removeEventListener("click", handler);
+        const handler = mobileLangHandlers.get($btn);
+        if (handler) $btn.removeEventListener("click", handler);
       });
     }, { once: true });
   });
