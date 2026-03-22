@@ -8,6 +8,8 @@ import esAbout from "./es/about";
 import esContact from "./es/contact";
 import esNav from "./es/nav";
 import esHero from "./es/hero";
+import esWork from "./es/work-section/";
+import enWork from "./en/work-section/";
 import { DEFAULT_LANGUAGE, type SupportedLanguage } from "@/consts/constants";
 
 export const languages: Record<SupportedLanguage, string> = {
@@ -24,6 +26,7 @@ export const ui = {
     ...enContact,
     ...enNav,
     ...enHero,
+    ...enWork,
   },
   es: {
     ...esFooter,
@@ -31,5 +34,6 @@ export const ui = {
     ...esContact,
     ...esNav,
     ...esHero,
+    ...esWork,
   },
 } as const;
