@@ -1,0 +1,91 @@
+---
+import { Image } from "astro:assets";
+
+interface Props {
+  title: string;
+  previewImage: string;
+  description: string;
+  technologies: string[];
+  link: string;
+  category: string;
+  moreTechnologies?: string;
+}
+
+const {
+  title,
+  previewImage,
+  description,
+  technologies,
+  link,
+  category,
+  moreTechnologies,
+} = Astro.props as Props;
+---
+
+<dialog data-name={title}>
+  <div class="w-100 h-200 m-auto">
+    Por su naturaleza, este proyecto es privado y no se puede mostrar
+    públicamente. Sin embargo, si estás interesado en conocer más detalles o
+    discutir posibles colaboraciones, no dudes en contactarme. Estoy abierto a
+    compartir información adicional sobre este proyecto bajo circunstancias
+    adecuadas.
+    <span class="close block mt-4 text-sm text-stone-500"
+      >Haz clic fuera de este cuadro para cerrarlo.</span
+    >
+  </div>
+</dialog>
+
+<div
+  class="project-card group bg-stone-50 rounded-xl overflow-hidden border border-stone-100 hover-card-lift flex flex-col"
+  data-category={category}
+>
+  <div class="aspect-4/3 bg-stone-200 relative overflow-hidden">
+    <div
+      class="absolute inset-0 flex items-center justify-center text-stone-400"
+    >
+      <!-- Icon or Image for Chatbot -->
+      <Image
+        src=`/${previewImage}`
+        alt="Project Preview"
+        width={400}
+        height={800}
+        class="w-full h-full object-fill absolute inset-0 grayscale group-hover:grayscale-0 transition-all duration-500"
+      />
+    </div>
+    <div
+      class="absolute inset-0 bg-stone-900/0 group-hover:bg-stone-900/5 transition-colors duration-300"
+    >
+    </div>
+  </div>
+  <div class="p-6 flex-1 flex flex-col">
+    <div class="mb-4">
+      <h3 class="text-xl font-serif font-medium text-stone-900 mb-2">
+        {title}
+      </h3>
+      <p class="text-stone-600 text-sm leading-relaxed line-clamp-3">
+        {description}
+      </p>
+    </div>
+    <div class="mt-auto">
+      <div class="flex flex-wrap gap-2">
+        {
+          technologies.slice(0, 3).map((tech, i) => (
+            <>
+              <span class="px-2 py-1 bg-white border border-stone-200 rounded text-xs font-medium text-stone-500">
+                {tech}
+              </span>
+              {
+                // NOTE: I wrote 2 because is the max of technologies that may appear
+              }
+              {i === 2 && technologies.length > 1 && (
+                <span class="px-2 py-1 bg-white border border-stone-200 rounded text-xs font-medium text-stone-500">
+                  +{technologies.length - 3} {moreTechnologies}
+                </span>
+              )}
+            </>
+          ))
+        }
+      </div>
+    </div>
+  </div>
+</div>
