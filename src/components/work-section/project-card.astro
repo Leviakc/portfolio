@@ -1,5 +1,7 @@
 ---
 import { Image } from "astro:assets";
+import type { Language } from "@/types/language";
+import { useTranslations } from "@/i18n/utils";
 
 interface Props {
   title: string;
@@ -8,6 +10,7 @@ interface Props {
   technologies: string[];
   link: string;
   category: string;
+  github?: string;
   moreTechnologies?: string;
 }
 
@@ -18,17 +21,89 @@ const {
   technologies,
   link,
   category,
+  github,
   moreTechnologies,
 } = Astro.props as Props;
+
+const lang = Astro.params.lang as Language;
+const t = useTranslations(lang);
 ---
 
 <project-card data-name={title}>
-  <dialog data-name={title}>
-    <div class="w-100 h-200 m-auto">
-      {description}
-      <span class="close block mt-4 text-sm text-stone-500"
-        >Haz clic fuera de este cuadro para cerrarlo.</span
+  <dialog
+    class="rounded-xl shadow-2xl p-0 w-full max-w-2xl max-h-[90vh] overflow-y-auto backdrop:bg-black/50 backdrop:backdrop-blur-sm border-0 m-auto"
+  >
+    <div class="bg-white rounded-xl">
+      <div class="flex justify-between items-center px-8 pt-8 pb-4">
+        <h2 class="text-2xl font-serif font-medium text-stone-900">{title}</h2>
+        <button
+          class="modal-close text-stone-400 hover:text-stone-900 transition-colors p-1"
+          aria-label="Close"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="h-5 w-5"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M6 18L18 6M6 6l12 12"></path>
+          </svg>
+        </button>
+      </div>
+      <div
+        class="mx-8 mb-6 rounded-lg overflow-hidden bg-stone-100 aspect-video relative"
       >
+        <Image
+          src=`/${previewImage}`
+          alt={title}
+          width={800}
+          height={450}
+          class="w-full h-full object-cover"
+        />
+      </div>
+      <p class="px-8 mb-6 text-stone-600 leading-relaxed text-sm">
+        {description}
+      </p>
+      <div class="px-8 mb-6 flex flex-wrap gap-2">
+        {
+          technologies.map((tech) => (
+            <span class="px-2 py-1 bg-stone-50 border border-stone-200 rounded text-xs font-medium text-stone-500">
+              {tech}
+            </span>
+          ))
+        }
+      </div>
+      <div class="px-8 pb-8 flex gap-6">
+        {
+          link && (
+            <a
+              href={link}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="text-sm font-medium text-stone-900 border-b border-stone-900 pb-0.5 hover:text-stone-600 hover:border-stone-600 transition-all"
+            >
+              {t("work.modal.viewProject")} →
+            </a>
+          )
+        }
+        {
+          github && (
+            <a
+              href={github}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="text-sm font-medium text-stone-500 border-b border-stone-300 pb-0.5 hover:text-stone-900 hover:border-stone-900 transition-all"
+            >
+              {t("work.modal.github")} →
+            </a>
+          )
+        }
+      </div>
     </div>
   </dialog>
   <div
@@ -100,9 +175,14 @@ const {
     render() {
       const dialog = this.querySelector("dialog");
       const projectCard = this.querySelector(".project-card");
+      const closeBtn = this.querySelector(".modal-close");
 
-      projectCard?.addEventListener("click", (event) => {
+      projectCard?.addEventListener("click", () => {
         dialog?.showModal();
+      });
+
+      closeBtn?.addEventListener("click", () => {
+        dialog?.close();
       });
 
       dialog?.addEventListener("click", (event) => {
