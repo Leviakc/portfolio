@@ -32,7 +32,7 @@ const {
     </div>
   </dialog>
   <div
-    class="project-card group bg-stone-50 rounded-xl overflow-hidden border border-stone-100 hover-card-lift flex flex-col"
+    class="project-card group bg-stone-50 rounded-xl overflow-hidden border border-stone-100 hover-card-lift flex flex-col cursor-pointer"
     data-category={category}
   >
     <div class="aspect-4/3 bg-stone-200 relative overflow-hidden">
@@ -62,7 +62,7 @@ const {
           {description}
         </p>
       </div>
-      <div class="mt-auto">
+      <div class="mt-auto flex items-end justify-between gap-2">
         <div class="flex flex-wrap gap-2">
           {
             technologies.slice(0, 3).map((tech, i) => (
@@ -82,6 +82,7 @@ const {
             ))
           }
         </div>
+        <span class="text-stone-900 text-xl shrink-0">→</span>
       </div>
     </div>
   </div>
