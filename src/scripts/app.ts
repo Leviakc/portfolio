@@ -43,10 +43,6 @@ const updateTime = () => {
   if ($seconds instanceof HTMLElement) {
     $seconds.innerText = seconds;
   }
-  // $days.innerText = days;
-  // $hours.innerText = hours;
-  // $minutes.innerText = minutes;
-  // $seconds.innerText = seconds;
 };
 
 updateTime();
