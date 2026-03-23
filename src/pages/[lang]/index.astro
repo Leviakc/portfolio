@@ -1,0 +1,71 @@
+---
+import Layout from "@/layouts/Layout.astro";
+import Hero from "@/components/hero.astro";
+import WorkSection from "@/components/work-section/work-section.astro";
+import About from "@/components/about.astro";
+import SocialTags from "@/components/social-tags.astro";
+import { createLanguageParams } from "@/consts/constants";
+import type { Language } from "@/types/language";
+import { useTranslations } from "@/i18n/utils";
+
+export async function getStaticPaths() {
+  return createLanguageParams();
+}
+
+const lang = Astro.params.lang as Language;
+const t = useTranslations(lang);
+---
+
+<Layout
+  title="Gomen's portfolio"
+  description="Dev portfolio under construction"
+>
+  <Hero />
+  <!-- Work Section (Tabs & Cards) -->
+  <WorkSection />
+
+  <!-- About / Skills Section -->
+  <About />
+
+  <!-- Contact Section -->
+  <SocialTags />
+
+  <!-- Footer -->
+  <footer class="py-12 bg-stone-900 border-t border-stone-800 text-stone-500">
+    <div class="max-w-5xl mx-auto px-6">
+      <div class="flex flex-col md:flex-row items-center justify-between gap-6">
+        <!-- Left: Name and Locky tribute -->
+        <div class="flex items-center gap-4">
+          <img
+            src="/Locky.png"
+            alt="Locky"
+            class="w-12 h-12 rounded-full object-cover border-2 border-stone-700 hover:border-stone-500 transition-colors"
+          />
+          <div class="text-left">
+            <p class="text-sm font-medium text-stone-400">Juan Gomen</p>
+            <p class="text-xs text-stone-600">
+              {t("footer.lockyTribute")}
+            </p>
+          </div>
+        </div>
+
+        <!-- Right: Copyright -->
+        <div class="text-center md:text-right">
+          <p class="text-sm">
+            &copy; <span id="year"></span> Juan Gomen. {t("footer.rights")}
+          </p>
+        </div>
+      </div>
+    </div>
+  </footer>
+</Layout>
+
+<script>
+  const main = () => {
+    const yearFooter = document.getElementById("year");
+    if (!yearFooter) return;
+    yearFooter.textContent = String(new Date().getFullYear());
+  };
+
+  main();
+</script>

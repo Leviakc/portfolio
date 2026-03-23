@@ -15,7 +15,7 @@ const $hours = document.querySelector("[data-hours]");
 const $minutes = document.querySelector("[data-minutes]");
 const $seconds = document.querySelector("[data-seconds]");
 
-if (typeof launchDate === null) {
+if (launchDate === null) {
   throw new Error("Invalid launch date");
 }
 const formatTime = (time: number) =>

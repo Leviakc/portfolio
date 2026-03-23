@@ -1,0 +1,44 @@
+---
+import CategoryTabs from "./category-tabs.astro";
+import ProjectCards from "./project-cards.astro";
+
+import type { Language } from "@/types/language";
+import { useTranslations } from "@/i18n/utils";
+
+const lang = Astro.params.lang as Language;
+const t = useTranslations(lang);
+---
+
+<section id="work" class="py-24 px-6 bg-white">
+  <div class="max-w-6xl mx-auto">
+    <div class="flex flex-col md:flex-row md:items-end justify-between mb-12">
+      <div>
+        <h2
+          class="text-sm font-bold uppercase tracking-widest text-stone-400 mb-2"
+        >
+          {t("work.title")}
+        </h2>
+        <!-- <h3 class="text-3xl font-serif text-stone-900">Selected Work</h3> -->
+      </div>
+
+      <!-- Category Tabs -->
+      <CategoryTabs />
+    </div>
+
+    <!-- Projects Grid -->
+    <ProjectCards />
+  </div>
+</section>
+<script>
+  const observer = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add("fade-in-up");
+          observer.unobserve(entry.target);
+        }
+      });
+    },
+    { threshold: 0.1 },
+  );
+</script>

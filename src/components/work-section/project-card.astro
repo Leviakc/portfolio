@@ -1,0 +1,193 @@
+---
+import { Image } from "astro:assets";
+import type { Language } from "@/types/language";
+import { useTranslations } from "@/i18n/utils";
+
+interface Props {
+  title: string;
+  previewImage: string;
+  description: string;
+  technologies: string[];
+  link: string;
+  category: string;
+  github?: string;
+  moreTechnologies?: string;
+}
+
+const {
+  title,
+  previewImage,
+  description,
+  technologies,
+  link,
+  category,
+  github,
+  moreTechnologies,
+} = Astro.props as Props;
+
+const lang = Astro.params.lang as Language;
+const t = useTranslations(lang);
+---
+
+<project-card data-name={title} data-category={category}>
+  <dialog
+    class="rounded-xl shadow-2xl p-0 w-[calc(100%-2rem)] max-w-2xl max-h-[90vh] overflow-y-auto backdrop:bg-black/50 backdrop:backdrop-blur-sm border-0 inset-0 m-auto"
+  >
+    <div class="bg-white rounded-xl">
+      <div class="flex justify-between items-center px-8 pt-8 pb-4">
+        <h2 class="text-2xl font-serif font-medium text-stone-900">{title}</h2>
+        <button
+          class="modal-close text-stone-400 hover:text-stone-900 transition-colors p-1"
+          aria-label="Close"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="h-5 w-5"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M6 18L18 6M6 6l12 12"></path>
+          </svg>
+        </button>
+      </div>
+      <div
+        class="mx-8 mb-6 rounded-lg overflow-hidden bg-stone-100 aspect-video relative"
+      >
+        <Image
+          src=`/${previewImage}`
+          alt={title}
+          width={800}
+          height={450}
+          class="w-full h-full object-fill"
+        />
+      </div>
+      <p class="px-8 mb-6 text-stone-600 leading-relaxed text-sm">
+        {description}
+      </p>
+      <div class="px-8 mb-6 flex flex-wrap gap-2">
+        {
+          technologies.map((tech) => (
+            <span class="px-2 py-1 bg-stone-50 border border-stone-200 rounded text-xs font-medium text-stone-500">
+              {tech}
+            </span>
+          ))
+        }
+      </div>
+      <div class="px-8 pb-8 flex gap-6">
+        {
+          link && (
+            <a
+              href={link}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="text-sm font-medium text-stone-900 border-b border-stone-900 pb-0.5 hover:text-stone-600 hover:border-stone-600 transition-all"
+            >
+              {t("work.modal.viewProject")} →
+            </a>
+          )
+        }
+        {
+          github && (
+            <a
+              href={github}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="text-sm font-medium text-stone-500 border-b border-stone-300 pb-0.5 hover:text-stone-900 hover:border-stone-900 transition-all"
+            >
+              {t("work.modal.github")} →
+            </a>
+          )
+        }
+      </div>
+    </div>
+  </dialog>
+  <div
+    class="project-card group bg-stone-50 rounded-xl overflow-hidden border border-stone-100 hover-card-lift flex flex-col cursor-pointer"
+    data-category={category}
+  >
+    <div class="aspect-4/3 bg-stone-200 relative overflow-hidden">
+      <div
+        class="absolute inset-0 flex items-center justify-center text-stone-400"
+      >
+        <Image
+          src=`/${previewImage}`
+          alt={title}
+          width={400}
+          height={800}
+          class="w-full h-full object-cover absolute inset-0 grayscale group-hover:grayscale-0 transition-all duration-500"
+        />
+      </div>
+      <div
+        class="absolute inset-0 bg-stone-900/0 group-hover:bg-stone-900/5 transition-colors duration-300"
+      >
+      </div>
+    </div>
+    <div class="p-6 flex-1 flex flex-col">
+      <div class="mb-4">
+        <h3 class="text-xl font-serif font-medium text-stone-900 mb-2">
+          {title}
+        </h3>
+        <p class="text-stone-600 text-sm leading-relaxed line-clamp-3">
+          {description}
+        </p>
+      </div>
+      <div class="mt-auto flex items-end justify-between gap-2">
+        <div class="flex flex-wrap gap-2">
+          {
+            technologies.slice(0, 3).map((tech, i) => (
+              <>
+                <span class="px-2 py-1 bg-white border border-stone-200 rounded text-xs font-medium text-stone-500">
+                  {tech}
+                </span>
+                {i === 2 && technologies.length > 3 && (
+                  <span class="px-2 py-1 bg-white border border-stone-200 rounded text-xs font-medium text-stone-500">
+                    +{technologies.length - 3} {moreTechnologies ?? "more"}
+                  </span>
+                )}
+              </>
+            ))
+          }
+        </div>
+        <span class="text-stone-900 text-xl shrink-0">→</span>
+      </div>
+    </div>
+  </div>
+</project-card>
+
+<script>
+  class ProjectCard extends HTMLElement {
+    constructor() {
+      super();
+    }
+
+    connectedCallback() {
+      this.render();
+    }
+    render() {
+      const dialog = this.querySelector("dialog");
+      const projectCard = this.querySelector(".project-card");
+      const closeBtn = this.querySelector(".modal-close");
+
+      projectCard?.addEventListener("click", () => {
+        dialog?.showModal();
+      });
+
+      closeBtn?.addEventListener("click", () => {
+        dialog?.close();
+      });
+
+      dialog?.addEventListener("click", (event) => {
+        if (event.target === dialog) {
+          dialog.close();
+        }
+      });
+    }
+  }
+
+  customElements.define("project-card", ProjectCard);
+</script>

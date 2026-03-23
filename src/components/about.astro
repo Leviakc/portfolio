@@ -1,0 +1,73 @@
+---
+import type { Language } from "@/types/language";
+import { useTranslations } from "@/i18n/utils";
+
+const lang = Astro.params.lang as Language;
+const t = useTranslations(lang);
+
+const design = t("about.skills.design.items") as string[];
+
+const development = [
+  "SolidJS/React",
+  "Rust/Go",
+  "TypeScript",
+  "Git, Github & Workflow",
+] as const;
+
+const tools = ["Figma", "Neovim", "Obsidian", "Open source tools"] as const;
+---
+
+<section id="about" class="py-24 px-6 bg-stone-50">
+  <div class="max-w-5xl mx-auto grid md:grid-cols-12 gap-12">
+    <div class="md:col-span-4">
+      <h2
+        class="text-sm font-bold uppercase tracking-widest text-stone-400 mb-6"
+      >
+        {t("about.title")}
+      </h2>
+    </div>
+    <div class="md:col-span-8">
+      <p
+        class="text-xl md:text-2xl font-serif text-stone-800 leading-relaxed mb-8"
+      >
+        {t("about.quote")}
+      </p>
+      <div class="text-stone-600 leading-relaxed space-y-6">
+        <p>
+          {t("about.bio.paragraph1")}
+        </p>
+        <p>
+          {t("about.bio.paragraph2")}
+        </p>
+      </div>
+
+      <div class="mt-12 grid grid-cols-2 md:grid-cols-3 gap-8">
+        <div>
+          <h4 class="font-medium text-stone-900 mb-2">
+            {t("about.skills.design.title")}
+          </h4>
+          <ul class="text-sm text-stone-600 space-y-1">
+            {design.map((item) => <li>{item}</li>)}
+          </ul>
+        </div>
+        <div>
+          <h4 class="font-medium text-stone-900 mb-2">
+            {t("about.skills.development.title")}
+          </h4>
+          <ul class="text-sm text-stone-600 space-y-1">
+            {development.map((item) => <li>{item}</li>)}
+          </ul>
+        </div>
+        <div>
+          <h4 class="font-medium text-stone-900 mb-2">
+            {t("about.skills.tools.title")}
+          </h4>
+          <ul class="text-sm text-stone-600 space-y-1">
+            {tools.map((tool) => <li>{tool}</li>)}
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+

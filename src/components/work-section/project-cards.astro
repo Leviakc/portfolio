@@ -1,0 +1,35 @@
+---
+import ProjectCard from "./project-card.astro";
+import type { Language } from "@/types/language";
+import { useTranslations } from "@/i18n/utils";
+type Project = {
+  "work.category": string;
+  "work.title": string;
+  "work.preview.image": string;
+  "work.description": string;
+  "work.technologies": string[];
+  "work.link": string;
+  "work.technologies.more"?: string;
+};
+const lang = Astro.params.lang as Language;
+const t = useTranslations(lang);
+const projects: Project[] = t("work.projects") as unknown as Project[];
+---
+
+<div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8" id="projects-grid">
+  {
+    projects.map((project) => (
+      <>
+        <ProjectCard
+          title={project["work.title"]}
+          previewImage={project["work.preview.image"]}
+          description={project["work.description"]}
+          technologies={project["work.technologies"]}
+          link={project["work.link"]}
+          category={project["work.category"]}
+          moreTechnologies={project["work.technologies.more"] || ""}
+        />
+      </>
+    ))
+  }
+</div>
