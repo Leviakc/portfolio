@@ -36,4 +36,3 @@ export const generateLanguagePaths = <T>(
 export const isValidLanguage = (lang: string): lang is SupportedLanguage => {
   return SUPPORTED_LANGUAGES.includes(lang as SupportedLanguage);
 };
-
