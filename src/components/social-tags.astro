@@ -60,96 +60,107 @@ const WEB3FORMS_KEY = import.meta.env.PUBLIC_WEB3FORMS_KEY;
 
       <!-- Right: form -->
       <div>
-        <form id="contact-form" novalidate>
-          <input type="hidden" name="access_key" value={WEB3FORMS_KEY} />
+        <contact-form
+          data-endpoint={CONTACT_ENDPOINT}
+          data-success={t("contact.form.success") as string}
+          data-error={t("contact.form.error") as string}
+          data-sending={t("contact.form.sending") as string}
+          data-submit={t("contact.form.submit") as string}
+        >
+          <form novalidate>
+            <input type="hidden" name="access_key" value={WEB3FORMS_KEY} />
 
-          <div class="space-y-8">
-            <input
-              type="text"
-              name="name"
-              required
-              placeholder={t("contact.form.name")}
-              class="w-full bg-transparent border-b border-stone-700 text-stone-100 placeholder-stone-500 py-3 focus:border-stone-300 focus:outline-none transition-colors"
-            />
-            <input
-              type="email"
-              name="email"
-              required
-              placeholder={t("contact.form.email")}
-              class="w-full bg-transparent border-b border-stone-700 text-stone-100 placeholder-stone-500 py-3 focus:border-stone-300 focus:outline-none transition-colors"
-            />
-            <textarea
-              name="message"
-              required
-              rows="4"
-              placeholder={t("contact.form.message")}
-              class="w-full bg-transparent border-b border-stone-700 text-stone-100 placeholder-stone-500 py-3 focus:border-stone-300 focus:outline-none transition-colors resize-none"
-            ></textarea>
-          </div>
+            <div class="space-y-8">
+              <input
+                type="text"
+                name="name"
+                required
+                placeholder={t("contact.form.name") as string}
+                class="w-full bg-transparent border-b border-stone-700 text-stone-100 placeholder-stone-500 py-3 focus:border-stone-300 focus:outline-none transition-colors"
+              />
+              <input
+                type="email"
+                name="email"
+                required
+                placeholder={t("contact.form.email") as string}
+                class="w-full bg-transparent border-b border-stone-700 text-stone-100 placeholder-stone-500 py-3 focus:border-stone-300 focus:outline-none transition-colors"
+              />
+              <textarea
+                name="message"
+                required
+                rows="4"
+                placeholder={t("contact.form.message") as string}
+                class="w-full bg-transparent border-b border-stone-700 text-stone-100 placeholder-stone-500 py-3 focus:border-stone-300 focus:outline-none transition-colors resize-none"
+              ></textarea>
+            </div>
 
-          <div class="mt-10 flex items-center gap-6">
-            <button
-              type="submit"
-              id="submit-btn"
-              class="text-sm font-medium text-stone-100 border-b border-stone-500 pb-0.5 hover:text-stone-300 hover:border-stone-300 transition-all disabled:opacity-40 disabled:cursor-not-allowed"
-            >
-              {t("contact.form.submit")} →
-            </button>
-            <p id="form-status" class="text-sm hidden"></p>
-          </div>
-        </form>
+            <div class="mt-10 flex items-center gap-6">
+              <button
+                type="submit"
+                class="contact-submit text-sm font-medium text-stone-100 border-b border-stone-500 pb-0.5 hover:text-stone-300 hover:border-stone-300 transition-all disabled:opacity-40 disabled:cursor-not-allowed"
+              >
+                {t("contact.form.submit") as string} →
+              </button>
+              <p class="contact-status text-sm hidden"></p>
+            </div>
+          </form>
+        </contact-form>
       </div>
     </div>
   </div>
 </section>
 
-<script
-  define:vars={{
-    CONTACT_ENDPOINT,
-    successMsg: t("contact.form.success"),
-    errorMsg: t("contact.form.error"),
-    sendingMsg: t("contact.form.sending"),
-    submitMsg: t("contact.form.submit"),
-  }}
->
-  const form = document.getElementById("contact-form");
-  const btn = document.getElementById("submit-btn");
-  const status = document.getElementById("form-status");
+<script>
+  class ContactForm extends HTMLElement {
+    connectedCallback() {
+      const endpoint = this.dataset.endpoint!;
+      const successMsg = this.dataset.success!;
+      const errorMsg = this.dataset.error!;
+      const sendingMsg = this.dataset.sending!;
+      const submitMsg = this.dataset.submit!;
 
-  form?.addEventListener("submit", async (e) => {
-    e.preventDefault();
+      const form = this.querySelector("form");
+      const btn = this.querySelector<HTMLButtonElement>(".contact-submit");
+      const status = this.querySelector<HTMLElement>(".contact-status");
 
-    btn.disabled = true;
-    btn.textContent = `${sendingMsg}`;
-    status.classList.add("hidden");
+      form?.addEventListener("submit", async (e) => {
+        e.preventDefault();
 
-    const data = Object.fromEntries(new FormData(form));
+        btn!.disabled = true;
+        btn!.textContent = sendingMsg;
+        status!.classList.add("hidden");
 
-    try {
-      const res = await fetch(CONTACT_ENDPOINT, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Accept: "application/json",
-        },
-        body: JSON.stringify(data),
+        const data = Object.fromEntries(new FormData(form));
+
+        try {
+          const res = await fetch(endpoint, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              Accept: "application/json",
+            },
+            body: JSON.stringify(data),
+          });
+
+          if (res.ok) {
+            form.reset();
+            status!.textContent = successMsg;
+            status!.className = "text-sm text-stone-300";
+            status!.classList.remove("hidden");
+          } else {
+            throw new Error();
+          }
+        } catch {
+          status!.textContent = errorMsg;
+          status!.className = "text-sm text-red-400";
+          status!.classList.remove("hidden");
+        } finally {
+          btn!.disabled = false;
+          btn!.textContent = `${submitMsg} →`;
+        }
       });
-
-      if (res.ok) {
-        form.reset();
-        status.textContent = successMsg;
-        status.className = "text-sm text-stone-300";
-        status.classList.remove("hidden");
-      } else {
-        throw new Error();
-      }
-    } catch {
-      status.textContent = errorMsg;
-      status.className = "text-sm text-red-400";
-      status.classList.remove("hidden");
-    } finally {
-      btn.disabled = false;
-      btn.textContent = `${submitMsg} →`;
     }
-  });
+  }
+
+  customElements.define("contact-form", ContactForm);
 </script>
